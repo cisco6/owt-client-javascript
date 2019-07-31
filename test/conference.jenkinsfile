@@ -85,6 +85,12 @@ pipeline {
         success {
             setBuildStatus("Build succeeded", "SUCCESS");
         }
+        always {
+            script {
+                sh "curl -H \"Content-Type: application/json\" -X POST --data '{\"commit_id\":\"'$GIT_COMMIT'\",\"job_path\":\"'${env.JS_CHECK_PATH}'\",\"job_name\":\"'$JOB_BASE_NAME'\",\"build_num\":\"'$BUILD_NUMBER'\"}' '${env.checkServerUrl}'/runServer/JS_BUILD_CONFERENCE_STEPS"
+            }
+        }
+}
         failure {
             setBuildStatus("Build failed", "FAILURE");
         }
